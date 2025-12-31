@@ -4,27 +4,29 @@ type PortalMode = 'main' | 'mini'
 
 interface PortalState {
   mode: PortalMode | null
+  returnPath: string | null
   onClose: (() => void) | null
 }
 
 interface PortalActions {
-  activate: (onClose?: () => void) => void
+  activate: (returnPath: string, onClose?: () => void) => void
   deactivate: () => void
   setMode: (mode: PortalMode) => void
 }
 
 export const usePortalStore = create<PortalState & PortalActions>((set, get) => ({
   mode: null,
+  returnPath: null,
   onClose: null,
 
-  activate: (onClose) => {
+  activate: (returnPath, onClose) => {
     get().onClose?.()
-    set({ mode: 'main', onClose: onClose ?? null })
+    set({ mode: 'main', returnPath, onClose: onClose ?? null })
   },
 
   deactivate: () => {
     get().onClose?.()
-    set({ mode: null, onClose: null })
+    set({ mode: null, returnPath: null, onClose: null })
   },
 
   setMode: (mode) => {
