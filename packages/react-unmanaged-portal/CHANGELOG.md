@@ -1,3 +1,54 @@
+## 0.2.0 (2026-01-01)
+
+### 🚀 Features
+
+- ⚠️  **react-unmanaged-portal:** add type-safe createPortal factory API ([#1](https://github.com/kickbelldev/react-unmanaged-portal/pull/1))
+- API 리네이밍 (mode -> slotKey) ([07b80bb](https://github.com/kickbelldev/react-unmanaged-portal/commit/07b80bb))
+
+### ⚠️  Breaking Changes
+
+- **react-unmanaged-portal:** add type-safe createPortal factory API  ([#1](https://github.com/kickbelldev/react-unmanaged-portal/pull/1))
+  Replace Portal.Host/Slot/usePortal with createPortal factory.
+  Before: <Portal.Host><video /></Portal.Host>
+  After: const P = createPortal({id, slots}); <P.Host node={<video />} />
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+  * refactor(react-unmanaged-portal): rename components to Internal prefix
+  - Rename PortalHost to InternalPortalHost
+  - Rename PortalSlot to InternalPortalSlot
+  - Change children prop to node prop in InternalPortalHost
+  - Components are now internal implementation details
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+  * test(react-unmanaged-portal): add createPortal integration tests
+  - Add comprehensive tests for createPortal factory function
+  - Rename existing tests to match Internal component names
+  - Update test imports to use node prop instead of children
+  - Test type safety, slot switching, multiple instances
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+  * docs(react-unmanaged-portal): update README for new createPortal API
+  - Document createPortal factory function usage
+  - Add type safety section with examples
+  - Update all code examples to use new API
+  - Add migration guide from v0.1.x
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+  * refactor(demo): migrate to new createPortal API
+  - Add VideoPortal definition using createPortal factory
+  - Update App.tsx to use VideoPortal.Host with node prop
+  - Update MainPortal, MiniPortal to use VideoPortal.Slot
+  - Update MiniPortalContainer to use VideoPortal.usePortal
+  - Remove portalId prop (now encapsulated in factory)
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+  Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+### ❤️ Thank You
+
+- Charley Kim
+- Claude Opus 4.5
+- Jongchan
+
 ## 0.1.0 (2026-01-01)
 
 ### 🚀 Features
