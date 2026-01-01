@@ -4,7 +4,7 @@ export const DEFAULT_PORTAL_ID = 'default'
 
 export interface PortalInstance {
   targets: Map<string, HTMLElement>
-  mode: string | null
+  slotKey: string | null
   returnPath: string | null
 }
 
@@ -29,7 +29,7 @@ function subscribe(listener: () => void) {
 
 const createEmptyInstance = (): PortalInstance => ({
   targets: new Map(),
-  mode: null,
+  slotKey: null,
   returnPath: null,
 })
 
@@ -47,35 +47,35 @@ export function getOrCreatePortal(portalId: string): PortalInstance {
 
 export function register(
   portalId: string,
-  mode: string,
+  slotKey: string,
   target: HTMLElement,
 ): void {
   const instance = portals.get(portalId) ?? createEmptyInstance()
   const targets = new Map(instance.targets)
-  targets.set(mode, target)
+  targets.set(slotKey, target)
 
   portals = new Map(portals)
   portals.set(portalId, { ...instance, targets })
   emitChange()
 }
 
-export function unregister(portalId: string, mode: string): void {
+export function unregister(portalId: string, slotKey: string): void {
   const instance = portals.get(portalId)
   if (!instance) return
 
   const targets = new Map(instance.targets)
-  targets.delete(mode)
+  targets.delete(slotKey)
 
   portals = new Map(portals)
   portals.set(portalId, { ...instance, targets })
   emitChange()
 }
 
-export function setMode(portalId: string, mode: string | null): void {
+export function setSlotKey(portalId: string, slotKey: string | null): void {
   const instance = portals.get(portalId) ?? createEmptyInstance()
 
   portals = new Map(portals)
-  portals.set(portalId, { ...instance, mode })
+  portals.set(portalId, { ...instance, slotKey })
   emitChange()
 }
 

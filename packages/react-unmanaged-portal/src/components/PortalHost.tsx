@@ -19,8 +19,8 @@ export function PortalHost<T extends keyof HTMLElementTagNameMap = 'div'>({
     document.createElement(container),
   )
 
-  const { mode, targets } = usePortal(portalId)
-  const target = targets.get(mode ?? '')
+  const { slotKey, targets } = usePortal(portalId)
+  const target = targets.get(slotKey ?? '')
 
   useEffect(() => {
     const unmanagedNode = unmanagedNodeRef.current

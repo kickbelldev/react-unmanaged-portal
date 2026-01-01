@@ -5,7 +5,7 @@ import {
   usePortalStore,
   register,
   unregister,
-  setMode as setModeAction,
+  setSlotKey as setSlotKeyAction,
   setReturnPath as setReturnPathAction,
   resetPortal as resetPortalAction,
 } from './store'
@@ -13,12 +13,12 @@ import {
 export function usePortal(portalId: string = DEFAULT_PORTAL_ID) {
   const portal = usePortalStore((portals) => portals.get(portalId))
 
-  const mode = portal?.mode ?? null
+  const slotKey = portal?.slotKey ?? null
   const returnPath = portal?.returnPath ?? null
   const targets = useMemo(() => portal?.targets ?? new Map(), [portal?.targets])
 
-  const setMode = useCallback(
-    (newMode: string | null) => setModeAction(portalId, newMode),
+  const setSlotKey = useCallback(
+    (newSlotKey: string | null) => setSlotKeyAction(portalId, newSlotKey),
     [portalId],
   )
 
@@ -30,21 +30,21 @@ export function usePortal(portalId: string = DEFAULT_PORTAL_ID) {
   const reset = useCallback(() => resetPortalAction(portalId), [portalId])
 
   const registerTarget = useCallback(
-    (targetMode: string, target: HTMLElement) =>
-      register(portalId, targetMode, target),
+    (targetSlotKey: string, target: HTMLElement) =>
+      register(portalId, targetSlotKey, target),
     [portalId],
   )
 
   const unregisterTarget = useCallback(
-    (targetMode: string) => unregister(portalId, targetMode),
+    (targetSlotKey: string) => unregister(portalId, targetSlotKey),
     [portalId],
   )
 
   return {
-    mode,
+    slotKey,
     returnPath,
     targets,
-    setMode,
+    setSlotKey,
     setReturnPath,
     reset,
     registerTarget,

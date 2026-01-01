@@ -12,13 +12,13 @@ interface PortalSlotProps<
   T extends keyof HTMLElementTagNameMap = 'div',
 > extends HTMLAttributes<HTMLElementTagNameMap[T]> {
   portalId?: string
-  mode: string
+  slotKey: string
   as?: T
 }
 
 export function PortalSlot<T extends keyof HTMLElementTagNameMap = 'div'>({
   portalId = DEFAULT_PORTAL_ID,
-  mode,
+  slotKey,
   as: container = 'div' as T,
   ...props
 }: PortalSlotProps<T>) {
@@ -27,11 +27,11 @@ export function PortalSlot<T extends keyof HTMLElementTagNameMap = 'div'>({
 
   useLayoutEffect(() => {
     if (slotRef.current) {
-      registerTarget(mode, slotRef.current)
+      registerTarget(slotKey, slotRef.current)
     }
 
-    return () => unregisterTarget(mode)
-  }, [mode, registerTarget, unregisterTarget])
+    return () => unregisterTarget(slotKey)
+  }, [slotKey, registerTarget, unregisterTarget])
 
   // eslint-disable-next-line react-hooks/refs
   return createElement(container, { ref: slotRef, ...props })
