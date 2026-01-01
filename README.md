@@ -4,10 +4,10 @@ Unmanaged DOM을 활용한 React 포털 라이브러리와 데모 앱.
 
 ## 패키지
 
-| 패키지 | 설명 |
-|--------|------|
+| 패키지                                                               | 설명                     |
+| -------------------------------------------------------------------- | ------------------------ |
 | [`@kayce/react-unmanaged-portal`](./packages/react-unmanaged-portal) | 헤드리스 포털 라이브러리 |
-| [`demo`](./apps/demo) | 비디오 플레이어 데모 앱 |
+| [`demo`](./apps/demo)                                                | 비디오 플레이어 데모 앱  |
 
 ## 빠른 시작
 
@@ -16,29 +16,25 @@ pnpm install
 pnpm dev        # demo 앱 실행
 ```
 
-## 라이브러리 사용법
-
-```bash
-pnpm add @kayce/react-unmanaged-portal
-```
+## 사용법
 
 ```tsx
-import { PortalHost, PortalSlot, usePortal } from '@kayce/react-unmanaged-portal'
+import { Portal, usePortal } from '@kayce/react-unmanaged-portal'
 
 function App() {
   return (
     <>
       {/* 포털 콘텐츠 */}
-      <PortalHost>
+      <Portal.Host>
         <video src="..." />
-      </PortalHost>
+      </Portal.Host>
 
       {/* 포털 슬롯들 */}
       <div className="main-area">
-        <PortalSlot mode="main" />
+        <Portal.Slot mode="main" />
       </div>
       <div className="mini-area">
-        <PortalSlot mode="mini" />
+        <Portal.Slot mode="mini" />
       </div>
     </>
   )
@@ -61,13 +57,13 @@ function Controls() {
 
 React의 `createPortal`만으로는 DOM 인스턴스 유지가 불가능하다. portal의 target이 바뀌면 React는 기존 DOM을 언마운트하고 새로 생성한다.
 
-이 라이브러리는 **React가 관리하지 않는 DOM 노드(Unmanaged DOM)**를 중간에 두어 이 문제를 해결한다:
+이 라이브러리는 **React가 관리하지 않는 Unmanaged DOM 노드**를 중간에 두어 이 문제를 해결한다:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                              React 영역                                  │
-│                                                                          │
-│   PortalHost                                                             │
+│                              React                                      │
+│                                                                         │
+│   PortalHost                                                            │
 │   ┌─────────────────────────────────────────────────────────────────┐   │
 │   │  unmanagedNodeRef = useRef(document.createElement('div'))       │   │
 │   │                           │                                     │   │
@@ -75,32 +71,32 @@ React의 `createPortal`만으로는 DOM 인스턴스 유지가 불가능하다. 
 │   │                           │                                     │   │
 │   │                           ▼                                     │   │
 │   │  ┌─────────────────────────────────────────────┐                │   │
-│   │  │         Unmanaged DOM Node (div)            │ ◄── React 외부 │   │
-│   │  │  ┌───────────────────────────────────────┐  │                │   │
-│   │  │  │           <video> 요소                │  │                │   │
-│   │  │  │    (재생 상태, 버퍼 등 유지됨)         │  │                │   │
+│   │  │           Unmanaged DOM Node (div)          │ ◄── Outside    │   │
+│   │  │  ┌───────────────────────────────────────┐  │     of React   │   │
+│   │  │  │           <video> Element             │  │                │   │
+│   │  │  │         (Keep video instance)         │  │                │   │
 │   │  │  └───────────────────────────────────────┘  │                │   │
 │   │  └─────────────────────────────────────────────┘                │   │
 │   │                           │                                     │   │
-│   │                    appendChild                                  │   │
+│   │                      appendChild                                │   │
 │   │                           │                                     │   │
-│   │              ┌────────────┴────────────┐                        │   │
-│   │              ▼                         ▼                        │   │
-│   │     PortalSlot (main)          PortalSlot (mini)                │   │
-│   │     ┌─────────────┐            ┌─────────────┐                  │   │
-│   │     │ <div ref /> │            │ <div ref /> │                  │   │
-│   │     └─────────────┘            └─────────────┘                  │   │
-│   │          ▲                          ▲                           │   │
-│   │          │                          │                           │   │
-│   │      register()                 register()                      │   │
-│   │          │                          │                           │   │
-│   │          └──────────┬───────────────┘                           │   │
-│   │                     ▼                                           │   │
-│   │              ┌─────────────┐                                    │   │
-│   │              │ Zustand     │                                    │   │
-│   │              │ targets Map │                                    │   │
-│   │              │ mode state  │                                    │   │
-│   │              └─────────────┘                                    │   │
+│   │              ┌────────────┴──────────────┐                      │   │
+│   │              ▼                           ▼                      │   │
+│   │     PortalSlot (main)           PortalSlot (mini)               │   │
+│   │       ┌─────────────┐            ┌─────────────┐                │   │
+│   │       │ <div ref /> │            │ <div ref /> │                │   │
+│   │       └─────────────┘            └─────────────┘                │   │
+│   │              ▲                           ▲                      │   │
+│   │              │                           │                      │   │
+│   │          register()                  register()                 │   │
+│   │              │                           │                      │   │
+│   │              └────────────┬──────────────┘                      │   │
+│   │                           ▼                                     │   │
+│   │                    ┌───────────────┐                            │   │
+│   │                    │ externalStore │                            │   │
+│   │                    │ targets Map   │                            │   │
+│   │                    │ mode state    │                            │   │
+│   │                    └───────────────┘                            │   │
 │   └─────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -124,72 +120,61 @@ createPortal(<video />, mode === 'main' ? mainRef : miniRef)
 
 ### Components
 
-| 컴포넌트 | 설명 |
-|---------|------|
-| `PortalHost` | unmanaged node 생성 + createPortal로 children 렌더링 |
-| `PortalSlot` | 자신의 DOM ref를 store에 등록/해제 |
+| 컴포넌트      | 설명                                                 | Props                                  |
+| ------------- | ---------------------------------------------------- | -------------------------------------- |
+| `Portal.Host` | unmanaged node 생성 + createPortal로 children 렌더링 | `portalId?`, `children`, `as?`         |
+| `Portal.Slot` | 자신의 DOM ref를 store에 등록/해제                   | `portalId?`, `mode`, `as?`, `...props` |
 
 ### Hooks
 
-| 훅 | 설명 |
-|---|------|
-| `usePortal(portalId?)` | 포털 상태 및 액션 (mode, setMode, reset 등) |
-| `usePortalStore` | 직접 Zustand 스토어 접근 |
+#### `usePortal(portalId?)`
+
+포털 상태 및 액션을 반환합니다.
+
+**반환값:**
+
+| 속성               | 타입                                          | 설명                                    |
+| ------------------ | --------------------------------------------- | --------------------------------------- |
+| `mode`             | `string \| null`                              | 현재 활성화된 모드                      |
+| `returnPath`       | `string \| null`                              | 포털 복귀 경로                          |
+| `targets`          | `Map<string, HTMLElement>`                    | 등록된 모든 타겟 모드와 DOM 요소 맵     |
+| `setMode`          | `(mode: string \| null) => void`              | 모드 설정                               |
+| `setReturnPath`    | `(path: string \| null) => void`              | 복귀 경로 설정                          |
+| `reset`            | `() => void`                                  | 포털 상태 초기화                        |
+| `registerTarget`   | `(mode: string, target: HTMLElement) => void` | 타겟 수동 등록 (일반적으로 사용 불필요) |
+| `unregisterTarget` | `(mode: string) => void`                      | 타겟 수동 해제 (일반적으로 사용 불필요) |
 
 ### 다중 포털 인스턴스
 
 ```tsx
 // 비디오 포털
-<PortalHost portalId="video"><VideoElement /></PortalHost>
-<PortalSlot portalId="video" mode="main" />
-<PortalSlot portalId="video" mode="mini" />
+<Portal.Host portalId="video"><VideoElement /></Portal.Host>
+<Portal.Slot portalId="video" mode="main" />
+<Portal.Slot portalId="video" mode="mini" />
 
 // 모달 포털 (완전히 독립적)
-<PortalHost portalId="modal"><ModalContent /></PortalHost>
-<PortalSlot portalId="modal" mode="center" />
+<Portal.Host portalId="modal"><ModalContent /></Portal.Host>
+<Portal.Slot portalId="modal" mode="center" />
+```
+
+### 커스텀 컨테이너 타입
+
+`as` prop을 사용하여 컨테이너 요소 타입을 지정할 수 있습니다:
+
+```tsx
+<Portal.Host as="section">
+  <video src="..." />
+</Portal.Host>
+
+<Portal.Slot mode="main" as="article" className="video-container" />
 ```
 
 ### 커스텀 모드
 
 ```tsx
-<PortalSlot mode="pip" />       // PIP 모드
-<PortalSlot mode="theater" />   // 극장 모드
-<PortalSlot mode="fullscreen" />
-```
-
-## 프로젝트 구조
-
-```
-video-portal/
-├── apps/
-│   └── demo/                          # 데모 앱
-│       ├── src/
-│       │   ├── App.tsx
-│       │   ├── features/
-│       │   │   ├── portal/            # 앱 전용 포털 컴포넌트
-│       │   │   │   ├── MainPortal.tsx
-│       │   │   │   ├── MiniPortal.tsx
-│       │   │   │   └── MiniPortalContainer.tsx
-│       │   │   └── player/            # 비디오 플레이어
-│       │   ├── pages/
-│       │   └── layouts/
-│       ├── package.json
-│       └── vite.config.ts
-│
-├── packages/
-│   └── react-unmanaged-portal/        # @kayce/react-unmanaged-portal
-│       ├── src/
-│       │   ├── index.ts               # Public API
-│       │   ├── PortalHost.tsx
-│       │   ├── PortalSlot.tsx
-│       │   ├── usePortal.ts
-│       │   └── store.ts
-│       ├── package.json
-│       └── vite.config.ts
-│
-├── nx.json
-├── pnpm-workspace.yaml
-└── package.json
+<Portal.Slot mode="pip" />       // PIP 모드
+<Portal.Slot mode="theater" />   // 극장 모드
+<Portal.Slot mode="fullscreen" />
 ```
 
 ## 스크립트
@@ -204,6 +189,4 @@ pnpm build:lib    # 라이브러리만 빌드
 
 - **Monorepo**: Nx + pnpm workspace
 - **Library**: Vite (library mode) + TypeScript
-- **Demo App**: React 19 + React Compiler + Vite + TailwindCSS
-- **State**: Zustand
-- **Routing**: React Router
+- **Demo App**: React 19 + React Compiler + Vite + TailwindCSS + React Router
