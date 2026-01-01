@@ -1,35 +1,48 @@
 import { create } from 'zustand'
 
-type PortalMode = 'main' | 'mini'
+type PortalMode = 'main' | 'mini' | null
+type ReturnPath = string | null
 
 interface PortalState {
-  mode: PortalMode | null
-  returnPath: string | null
-  onClose: (() => void) | null
+  targets: Map<PortalMode, HTMLElement>
+  mode: PortalMode
+  returnPath: ReturnPath
 }
 
 interface PortalActions {
-  activate: (returnPath: string, onClose?: () => void) => void
-  deactivate: () => void
+  register: (mode: PortalMode, target: HTMLElement) => void
+  unregister: (mode: PortalMode) => void
   setMode: (mode: PortalMode) => void
+  setReturnPath: (path: ReturnPath) => void
+  reset: () => void
 }
 
-export const usePortalStore = create<PortalState & PortalActions>((set, get) => ({
+const initialState: PortalState = {
+  targets: new Map(),
   mode: null,
   returnPath: null,
-  onClose: null,
+}
 
-  activate: (returnPath, onClose) => {
-    get().onClose?.()
-    set({ mode: 'main', returnPath, onClose: onClose ?? null })
-  },
+export const usePortalStore = create<PortalState & PortalActions>(
+  (set) =>
+    ({
+      ...initialState,
 
-  deactivate: () => {
-    get().onClose?.()
-    set({ mode: null, returnPath: null, onClose: null })
-  },
+      register: (mode, target) =>
+        set((state) => {
+          const targets = new Map(state.targets)
+          targets.set(mode, target)
+          return { targets }
+        }),
+      unregister: (mode) =>
+        set((state) => {
+          const targets = new Map(state.targets)
+          targets.delete(mode)
+          return { targets }
+        }),
+      setMode: (mode) => set({ mode }),
+      setReturnPath: (path) => set({ returnPath: path }),
 
-  setMode: (mode) => {
-    set({ mode })
-  },
-}))
+      reset: () => set(initialState),
+    }) satisfies PortalState & PortalActions,
+)
