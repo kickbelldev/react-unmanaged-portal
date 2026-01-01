@@ -6,6 +6,16 @@
 
 A React portal library that leverages Unmanaged DOM to dynamically move portal content while **preserving the actual DOM instances**.
 
+## Installation
+
+```bash
+npm install @charley-kim/react-preserve-portal
+# or
+pnpm add @charley-kim/react-preserve-portal
+# or
+yarn add @charley-kim/react-preserve-portal
+```
+
 ## Core Concept: Unmanaged DOM Node
 
 React's `createPortal` alone cannot preserve DOM instances because it is bound to the React lifecycle. When the portal target changes, React unmounts the existing DOM and creates a new one.
@@ -25,7 +35,7 @@ React -> createPortal -> Unmanaged Node (div) -> Slot targets
               Only uses appendChild/removeChild
 ```
 
-This approach bypasses React's render-commit lifecycle, physically moving the DOM node.
+This approach bypasses React's lifecycle, physically moving the DOM node.
 
 ## Use Cases
 
@@ -72,16 +82,6 @@ Useful for any DOM element where recreation is expensive or causes state loss:
 - Chat widgets, payment forms
 - SDK initialization preserved
 - User input state maintained
-
-## Installation
-
-```bash
-npm install @charley-kim/react-preserve-portal
-# or
-pnpm add @charley-kim/react-preserve-portal
-# or
-yarn add @charley-kim/react-preserve-portal
-```
 
 ## Quick Start
 
