@@ -32,6 +32,6 @@ export function PortalHost({
     }
   }, [target])
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/refs
   return <>{createPortal(children, unmanagedNodeRef.current)}</>
 }

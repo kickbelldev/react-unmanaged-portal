@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import { DEFAULT_PORTAL_ID, usePortalStore } from '../model/store'
 
 export function usePortal(portalId: string = DEFAULT_PORTAL_ID) {
@@ -14,31 +12,18 @@ export function usePortal(portalId: string = DEFAULT_PORTAL_ID) {
   const returnPath = portal?.returnPath ?? null
   const targets = portal?.targets ?? new Map()
 
-  const setMode = useCallback(
-    (newMode: string | null) => setModeAction(portalId, newMode),
-    [portalId, setModeAction],
-  )
+  const setMode = (newMode: string | null) => setModeAction(portalId, newMode)
 
-  const setReturnPath = useCallback(
-    (path: string | null) => setReturnPathAction(portalId, path),
-    [portalId, setReturnPathAction],
-  )
+  const setReturnPath = (path: string | null) =>
+    setReturnPathAction(portalId, path)
 
-  const reset = useCallback(
-    () => resetPortalAction(portalId),
-    [portalId, resetPortalAction],
-  )
+  const reset = () => resetPortalAction(portalId)
 
-  const registerTarget = useCallback(
-    (targetMode: string, target: HTMLElement) =>
-      register(portalId, targetMode, target),
-    [portalId, register],
-  )
+  const registerTarget = (targetMode: string, target: HTMLElement) =>
+    register(portalId, targetMode, target)
 
-  const unregisterTarget = useCallback(
-    (targetMode: string) => unregister(portalId, targetMode),
-    [portalId, unregister],
-  )
+  const unregisterTarget = (targetMode: string) =>
+    unregister(portalId, targetMode)
 
   return {
     mode,
