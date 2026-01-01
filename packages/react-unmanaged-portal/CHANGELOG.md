@@ -1,3 +1,13 @@
+## 0.1.0 (2026-01-01)
+
+### 🚀 Features
+
+- API 리네이밍 (mode -> slotKey) ([07b80bb](https://github.com/kickbelldev/react-portal-trick/commit/07b80bb))
+
+### ❤️ Thank You
+
+- Charley Kim
+
 ## 0.0.1 (2026-01-01)
 
 ### 🚀 Features
