@@ -1,6 +1,6 @@
 import { render, screen, waitFor, act } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
-import { resetPortal, setMode, register } from '../model/store'
+import { resetPortal, setSlotKey, register } from '../model/store'
 import { PortalHost } from './PortalHost'
 
 describe('PortalHost', () => {
@@ -14,7 +14,7 @@ describe('PortalHost', () => {
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    setMode('default', 'main')
+    setSlotKey('default', 'main')
 
     render(
       <PortalHost>
@@ -35,7 +35,7 @@ describe('PortalHost', () => {
     document.body.appendChild(target)
 
     register('custom-portal', 'main', target)
-    setMode('custom-portal', 'main')
+    setSlotKey('custom-portal', 'main')
 
     render(
       <PortalHost portalId="custom-portal">
@@ -53,7 +53,7 @@ describe('PortalHost', () => {
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    setMode('default', 'main')
+    setSlotKey('default', 'main')
 
     render(
       <PortalHost as="section">
@@ -69,12 +69,12 @@ describe('PortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('모드가 설정되지 않으면 렌더링되지 않음', () => {
+  it('슬롯 키가 설정되지 않으면 렌더링되지 않음', () => {
     const target = document.createElement('div')
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    // setMode를 호출하지 않음
+    // setSlotKey를 호출하지 않음
 
     render(
       <PortalHost>
@@ -88,7 +88,7 @@ describe('PortalHost', () => {
     document.body.removeChild(target)
   })
 
-  it('모드가 변경되면 새로운 타겟으로 이동', async () => {
+  it('슬롯 키가 변경되면 새로운 타겟으로 이동', async () => {
     const target1 = document.createElement('div')
     const target2 = document.createElement('div')
     target1.id = 'target1'
@@ -96,9 +96,9 @@ describe('PortalHost', () => {
     document.body.appendChild(target1)
     document.body.appendChild(target2)
 
-    register('default', 'mode1', target1)
-    register('default', 'mode2', target2)
-    setMode('default', 'mode1')
+    register('default', 'slotKey1', target1)
+    register('default', 'slotKey2', target2)
+    setSlotKey('default', 'slotKey1')
 
     render(
       <PortalHost>
@@ -113,7 +113,7 @@ describe('PortalHost', () => {
     })
 
     act(() => {
-      setMode('default', 'mode2')
+      setSlotKey('default', 'slotKey2')
     })
 
     await waitFor(() => {
@@ -131,7 +131,7 @@ describe('PortalHost', () => {
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    setMode('default', 'main')
+    setSlotKey('default', 'main')
 
     const { unmount } = render(
       <PortalHost>
@@ -153,7 +153,7 @@ describe('PortalHost', () => {
     document.body.appendChild(target)
 
     register('default', 'main', target)
-    setMode('default', 'main')
+    setSlotKey('default', 'main')
 
     render(
       <>
