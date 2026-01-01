@@ -4,16 +4,19 @@ import { createPortal } from 'react-dom'
 import { DEFAULT_PORTAL_ID } from './store'
 import { usePortal } from './usePortal'
 
-interface PortalHostProps {
+interface PortalHostProps<T extends keyof HTMLElementTagNameMap = 'div'> {
   portalId?: string
   children: ReactNode
+  as?: T
 }
 
-export function PortalHost({
+export function PortalHost<T extends keyof HTMLElementTagNameMap = 'div'>({
   portalId = DEFAULT_PORTAL_ID,
   children,
-}: PortalHostProps) {
-  const unmanagedNodeRef = useRef<HTMLDivElement>(document.createElement('div'))
+  as,
+}: PortalHostProps<T>) {
+  const container = as ?? 'div'
+  const unmanagedNodeRef = useRef<HTMLElement>(document.createElement(container))
 
   const { mode, targets } = usePortal(portalId)
   const target = targets.get(mode ?? '')
