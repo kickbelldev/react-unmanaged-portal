@@ -52,6 +52,16 @@ export default defineConfig([
               position: 'before',
             },
             {
+              pattern: '@/layouts/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/pages/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
               pattern: '@/constants/**',
               group: 'internal',
               position: 'before',
